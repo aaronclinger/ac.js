@@ -4,7 +4,7 @@
 
 ## Documentation
 
-While `AC.js` does not provided documentation, it’s a very simple utility and can be learned very quickly. Here is an example of some of its usage:
+While `AC.js` does not provide documentation, it’s a very simple utility and can be learned very quickly. Here is an example of some of its usage:
 
 ```js
 AC.ready(function() {
