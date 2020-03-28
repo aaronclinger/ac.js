@@ -10,7 +10,7 @@ While `AC.js` does not provided documentation, it’s a very simple utility and 
 AC.ready(function() {
 	var limit = AC.rateLimit(function() {
 		console.log('Will be called once every 500ms when scrolling');
-	}, 1000);
+	}, 500);
 	
 	AC.wrap(window).on('scroll', limit, AC.PASSIVE_PARAM); 	
 });
