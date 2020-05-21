@@ -152,13 +152,20 @@
 	}
 	
 	function AC() {
-		var pub = {};
+		var pub            = {};
+		var webpSupport    = null;
+		var passiveSupport = null;
 		
 		var init = function() {
-			pub.TRANSITION_EVENT      = whichTransitionEvent();
-			pub.ANIMATION_EVENT       = whichAnimationEvent();
-			pub.SUPPORTS_PASSIVE      = doesSupportPassive();
-			pub.PASSIVE_PARAM         = pub.SUPPORTS_PASSIVE ? { passive: true } : false;
+			Object.defineProperty(pub, 'SUPPORTS_PASSIVE', {
+				get: doesSupportPassive
+			});
+			Object.defineProperty(pub, 'PASSIVE_PARAM', {
+				get: function() {
+					return pub.SUPPORTS_PASSIVE ? { passive: true } : false;
+				}
+			});
+			
 			pub.SUPPORTS_INTERSECTION = 'IntersectionObserver' in window;
 		};
 		
@@ -289,49 +296,40 @@
 			return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
 		};
 		
-		var whichTransitionEvent = function() {
-			var el = document.createElement('div'),
-			    t;
+		pub.testSupportWebP = function(callback) {
+			if (webpSupport !== null) {
+				callback(webpSupport);
+				return;
+			}
 			
-			var transitions = {
-				transition      : 'transitionend',
-				OTransition     : 'oTransitionEnd',
-				MozTransition   : 'transitionend',
-				WebkitTransition: 'webkitTransitionEnd'
+			var img = new Image();
+			
+			img.onload = function() {
+				webpSupport = (img.width > 0) && (img.height > 0);
+				
+				callback(webpSupport);
 			};
 			
-			for (t in transitions) {
-				if (el.style[t] !== undefined) {
-					return transitions[t];
-				}
-			}
-		};
-		
-		var whichAnimationEvent = function() {
-			var el = document.createElement('div'),
-			    t;
-			
-			var animations = {
-				animation      : 'animationend',
-				OAnimation     : 'oAnimationEnd',
-				MozAnimation   : 'animationend',
-				WebkitAnimation: 'webkitAnimationEnd'
+			img.onerror = function() {
+				webpSupport = false;
+				
+				callback(webpSupport);
 			};
 			
-			for (t in animations) {
-				if (el.style[t] !== undefined) {
-					return animations[t];
-				}
-			}
+			img.src = 'data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA';
 		};
 		
 		var doesSupportPassive = function() {
-			var supportsPassive = false;
+			if (passiveSupport !== null) {
+				return passiveSupport;
+			}
+			
+			passiveSupport = false;
 			
 			try {
 				var opts = Object.defineProperty({}, 'passive', {
 					get: function() {
-						supportsPassive = true;
+						passiveSupport = true;
 					}
 				});
 				
@@ -340,7 +338,7 @@
 				return false;
 			}
 			
-			return supportsPassive;
+			return passiveSupport;
 		};
 		
 		init();
