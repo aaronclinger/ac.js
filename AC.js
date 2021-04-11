@@ -45,7 +45,11 @@
 		};
 		
 		pub.data = function(id) {
-			return element.getAttribute('data-' + id);
+			if (id) {
+				return element.dataset[id];
+			}
+			
+			return element.dataset;
 		};
 		
 		pub.get = function(selector, onlyFirst) {
@@ -73,7 +77,9 @@
 		};
 		
 		pub.remove = function() {
-			element.parentNode.removeChild(element);
+			if (element.parentNode) {
+				element.parentNode.removeChild(element);
+			}
 			
 			return pub;
 		};
@@ -238,12 +244,12 @@
 			return request;
 		};
 		
-		pub.new = function(elString) {
+		pub.new = function(elString, namespace) {
 			if (elString.indexOf('<') === 0) {
 				return pub.wrap(pub.new('div').setHTML(elString).getElement().firstChild);
 			}
 			
-			return pub.wrap(document.createElement(elString));
+			return pub.wrap(namespace ? document.createElementNS(namespace, elString) : document.createElement(elString));
 		};
 		
 		pub.rateLimit = function(callback, limit) {
