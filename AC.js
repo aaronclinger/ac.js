@@ -176,6 +176,17 @@
 		};
 		
 		pub.wrap = function(element) {
+			if (element.length) {
+				var list = [],
+				    i    = -1;
+				
+				while (++i < element.length) {
+					list.push(new ACElement(element[i]));
+				}
+				
+				return list;
+			}
+			
 			return new ACElement(element);
 		};
 		
