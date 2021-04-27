@@ -199,10 +199,7 @@
 		};
 		
 		pub.get = function(selector, onlyFirst, scope) {
-			var selectorType = onlyFirst ? 'querySelector' : 'querySelectorAll',
-			    list,
-			    el,
-			    i;
+			var selectorType = onlyFirst ? 'querySelector' : 'querySelectorAll';
 			
 			scope = scope || document;
 			
@@ -211,24 +208,7 @@
 				selector     = selector.substr(1, selector.length);
 			}
 			
-			el = scope[selectorType](selector);
-			
-			if (el.length === 0) {
-				return null;
-			} else if (el.length === 1 && onlyFirst) {
-				return pub.wrap(el[0]);
-			} else if (el.length > 0) {
-				list = [];
-				i    = -1;
-				
-				while (++i < el.length) {
-					list.push(pub.wrap(el[i]));
-				}
-				
-				return list;
-			}
-			
-			return pub.wrap(el);
+			return scope[selectorType](selector);
 		};
 		
 		pub.getRequest = function(url, callback, errorCallback) {
