@@ -283,6 +283,14 @@
 			};
 		};
 		
+		pub.constrain = function(value, min, max) {
+			return Math.min(Math.max(value, min), max);
+		};
+		
+		pub.interpolate = function(begin, end, percent) {
+			return begin + (end - begin) * percent;
+		};
+		
 		pub.each = function(list, callback) {
 			var i = -1,
 			    l = list.length;
