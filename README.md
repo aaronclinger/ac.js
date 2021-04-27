@@ -12,7 +12,7 @@ AC.ready(function() {
 		console.log('Will be called once every 500ms when scrolling');
 	}, 500);
 	
-	AC.wrap(window).on('scroll', limit, AC.PASSIVE_PARAM); 	
+	AC.wrap(window).on('scroll', limit, AC.PASSIVE_PARAM);
 });
 ```
 
