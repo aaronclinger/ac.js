@@ -8,7 +8,7 @@ While `AC.js` does not provide documentation, it’s a very simple utility and c
 
 ```js
 AC.ready(function() {
-	var limit = AC.rateLimit(function() {
+	let limit = AC.rateLimit(function() {
 		console.log('Will be called once every 500ms when scrolling');
 	}, 500);
 	
