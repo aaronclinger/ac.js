@@ -69,6 +69,17 @@ export default class AC {
 		return new AC(element);
 	}
 	
+	static delegate(element, eventName, selector, callback) {
+		element.addEventListener(eventName, function(e) {
+			for (var target = e.target; target && target != this; target = target.parentNode) {
+				if (target.matches(selector)) {
+					callback.call(target, e, target);
+					break;
+				}
+			}
+		}, false);
+	}
+	
 	static getRequest(url, callback, errorCallback) {
 		let request = new XMLHttpRequest();
 		
@@ -198,6 +209,12 @@ export default class AC {
 	
 	off(eventName, eventHandler) {
 		this._el.removeEventListener(eventName, eventHandler);
+		
+		return this;
+	}
+	
+	delegate(eventName, selector, callback) {
+		AC.delegate(this._el, eventName, selector, callback);
 		
 		return this;
 	}
