@@ -162,6 +162,21 @@ export default class AC {
 		}
 	}
 	
+	static find(list, callback) {
+		let l = list.length,
+		    v;
+		
+		while (l--) {
+			v = callback(list[l], l);
+			
+			if (v !== undefined) {
+				return v;
+			}
+		}
+		
+		return null;
+	}
+	
 	static pageX() {
 		return (window.pageXOffset !== undefined) ? window.pageXOffset : (document.documentElement || document.body.parentNode || document.body).scrollLeft;
 	}
