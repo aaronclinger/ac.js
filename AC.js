@@ -106,10 +106,10 @@ export default class AC {
 	
 	static new(elString, namespace) {
 		if (elString.indexOf('<') === 0) {
-			return AC.wrap(AC.new('div').setHTML(elString).getElement().firstChild);
+			return AC.new('div').setHTML(elString).getElement().firstChild;
 		}
 		
-		return AC.wrap(namespace ? document.createElementNS(namespace, elString) : document.createElement(elString));
+		return namespace ? document.createElementNS(namespace, elString) : document.createElement(elString);
 	}
 	
 	static rateLimit(callback, limit) {
@@ -212,10 +212,6 @@ export default class AC {
 		this._el = element;
 	}
 	
-	getElement() {
-		return this._el;
-	}
-	
 	on(eventName, eventHandler, options) {
 		this._el.addEventListener(eventName, eventHandler, options);
 		
@@ -234,27 +230,6 @@ export default class AC {
 		return this;
 	}
 	
-	height() {
-		return this._el.offsetHeight;
-	}
-	
-	width() {
-		return this._el.offsetWidth;
-	}
-	
-	offset() {
-		let rect = this._el.getBoundingClientRect();
-		
-		return {
-			top: rect.top + window.AC.pageY(),
-			left: rect.left + window.AC.pageX()
-		}
-	}
-	
-	style() {
-		return this._el.style;
-	}
-	
 	data(id) {
 		if (id) {
 			return this._el.dataset[id];
@@ -264,7 +239,7 @@ export default class AC {
 	}
 	
 	get(selector, onlyFirst) {
-		return window.AC.get(selector, onlyFirst, this._el);
+		return AC.get(selector, onlyFirst, this._el);
 	}
 	
 	prepend(el) {
@@ -323,6 +298,8 @@ export default class AC {
 		} else {
 			this.addClass(className);
 		}
+		
+		return this;
 	}
 	
 	setAttribute(name, value) {
@@ -341,27 +318,48 @@ export default class AC {
 		return this._el.getAttribute(name);
 	}
 	
-	setText(text) {
+	set text(text) {
 		this._el.textContent = text;
-		
-		return this;
 	}
 	
-	getText() {
+	get text() {
 		return this._el.textContent;
 	}
 	
-	setHTML(html) {
+	set html(html) {
 		this._el.innerHTML = html;
-		
-		return this;
 	}
 	
-	getHTML() {
+	get html() {
 		return this._el.innerHTML;
 	}
 	
-	getParent() {
-		return window.AC.wrap(this._el.parentNode);
+	get parent() {
+		return this._el.parentNode;
+	}
+	
+	get element() {
+		return this._el;
+	}
+	
+	get height() {
+		return this._el.offsetHeight;
+	}
+	
+	get width() {
+		return this._el.offsetWidth;
+	}
+	
+	get offset() {
+		let rect = this._el.getBoundingClientRect();
+		
+		return {
+			top: rect.top + AC.pageY(),
+			left: rect.left + AC.pageX()
+		}
+	}
+	
+	get style() {
+		return this._el.style;
 	}
 }
