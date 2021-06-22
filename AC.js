@@ -293,11 +293,7 @@ export default class AC {
 	}
 	
 	toggleClass(className) {
-		if (this.hasClass(className)) {
-			this.removeClass(className);
-		} else {
-			this.addClass(className);
-		}
+		this._el.classList.toggleClass(className);
 		
 		return this;
 	}
