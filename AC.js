@@ -69,7 +69,9 @@ export default class AC {
 		return new AC(element);
 	}
 	
-	static delegate(element, eventName, selector, callback) {
+	static delegate(element, eventName, selector, callback, options) {
+		options = typeof options === 'undefined' ? false : options;
+		
 		element.addEventListener(eventName, function(e) {
 			for (var target = e.target; target && target != this; target = target.parentNode) {
 				if (target.matches(selector)) {
@@ -77,7 +79,7 @@ export default class AC {
 					break;
 				}
 			}
-		}, false);
+		}, options);
 	}
 	
 	static getRequest(url, callback, errorCallback) {
