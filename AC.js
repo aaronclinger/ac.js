@@ -226,8 +226,8 @@ export default class AC {
 		return this;
 	}
 	
-	delegate(eventName, selector, callback) {
-		AC.delegate(this._el, eventName, selector, callback);
+	delegate(eventName, selector, callback, options) {
+		AC.delegate(this._el, eventName, selector, callback, options);
 		
 		return this;
 	}
