@@ -171,7 +171,7 @@ export default class AC {
 		while (l--) {
 			v = callback(list[l], l);
 			
-			if (v !== undefined) {
+			if (v !== null) {
 				return v;
 			}
 		}
