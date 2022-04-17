@@ -69,6 +69,10 @@ export default class AC {
 		return new AC(element);
 	}
 	
+	static getWrapped(selector, onlyFirst, scope) {
+		return AC.wrap(AC.get(selector, onlyFirst, scope));
+	}
+	
 	static delegate(element, eventName, selector, callback, options) {
 		options = typeof options === 'undefined' ? false : options;
 		
@@ -108,7 +112,11 @@ export default class AC {
 	
 	static new(elString, namespace) {
 		if (elString.indexOf('<') === 0) {
-			return AC.new('div').setHTML(elString).getElement().firstChild;
+			const el = AC.wrap(AC.new('div'));
+			
+			el.html = elString;
+			
+			return el.element.firstChild;
 		}
 		
 		return namespace ? document.createElementNS(namespace, elString) : document.createElement(elString);
@@ -166,7 +174,7 @@ export default class AC {
 	
 	static find(list, callback) {
 		let l = list.length,
-		    v;
+			v;
 		
 		while (l--) {
 			v = callback(list[l], l);
@@ -242,6 +250,10 @@ export default class AC {
 	
 	get(selector, onlyFirst) {
 		return AC.get(selector, onlyFirst, this._el);
+	}
+	
+	getWrapped(selector, onlyFirst) {
+		return AC.wrap(this.get(selector, onlyFirst));
 	}
 	
 	prepend(el) {
