@@ -41,8 +41,8 @@ export default class AC {
 		}
 	}
 	
-	static get(selector, onlyFirst, scope) {
-		let selectorType = onlyFirst ? 'querySelector' : 'querySelectorAll';
+	static get(selector, all, scope) {
+		let selectorType = all ? 'querySelectorAll' : 'querySelector';
 		
 		scope = scope || document;
 		
@@ -69,14 +69,22 @@ export default class AC {
 		return new AC(element);
 	}
 	
-	static getWrapped(selector, onlyFirst, scope) {
-		return AC.wrap(AC.get(selector, onlyFirst, scope));
+	static getWrapped(selector, all, scope) {
+		return AC.wrap(AC.get(selector, all, scope));
+	}
+	
+	static on(element, eventName, eventHandler, options) {
+		element.addEventListener(eventName, eventHandler, options);
+	}
+	
+	static off(element, eventName, eventHandler) {
+		element.removeEventListener(eventName, eventHandler);
 	}
 	
 	static delegate(element, eventName, selector, callback, options) {
 		options = typeof options === 'undefined' ? false : options;
 		
-		element.addEventListener(eventName, function(e) {
+		AC.on(element, eventName, function(e) {
 			for (var target = e.target; target && target != this; target = target.parentNode) {
 				if (target.matches(selector)) {
 					callback.call(target, e, target);
@@ -223,13 +231,13 @@ export default class AC {
 	}
 	
 	on(eventName, eventHandler, options) {
-		this._el.addEventListener(eventName, eventHandler, options);
+		AC.on(this._el, eventName, eventHandler, options);
 		
 		return this;
 	}
 	
 	off(eventName, eventHandler) {
-		this._el.removeEventListener(eventName, eventHandler);
+		AC.off(this._el, eventName, eventHandler);
 		
 		return this;
 	}
@@ -248,12 +256,12 @@ export default class AC {
 		return this._el.dataset;
 	}
 	
-	get(selector, onlyFirst) {
-		return AC.get(selector, onlyFirst, this._el);
+	get(selector, all) {
+		return AC.get(selector, all, this._el);
 	}
 	
-	getWrapped(selector, onlyFirst) {
-		return AC.wrap(this.get(selector, onlyFirst));
+	getWrapped(selector, all) {
+		return AC.wrap(this.get(selector, all));
 	}
 	
 	prepend(el) {
