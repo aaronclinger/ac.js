@@ -94,26 +94,34 @@ export default class AC {
 		}, options);
 	}
 	
-	static getRequest(url, callback, errorCallback) {
-		let request = new XMLHttpRequest();
+	static request(url, options) {
+		AC.defaults(options || {}, {
+			method: 'GET',
+			type: '',
+			send: null
+		});
 		
-		request.open('GET', url, true);
+		const request = new XMLHttpRequest();
+		
+		request.open(options.method, url);
 		
 		request.onload = function() {
 			if (request.status >= 200 && request.status < 400) {
-				if (callback) {
-					callback(request.responseText);
+				if (options.success) {
+					options.success(request.response);
 				}
 			} else {
-				if (errorCallback) {
-					errorCallback();
+				if (options.error) {
+					options.error();
 				}
 			}
 		};
 		
-		request.onerror = errorCallback;
+		request.responseType = options.type;
+		request.onerror      = options.error;
+		request.onprogress   = options.progress;
 		
-		request.send();
+		request.send(options.send);
 		
 		return request;
 	}
@@ -201,6 +209,14 @@ export default class AC {
 	
 	static pageY() {
 		return (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+	}
+	
+	static defaults(options, defaults) {
+		for (var i in defaults) {
+			if (options[i] === undefined) {
+				options[i] = defaults[i];
+			}
+		}
 	}
 	
 	static testSupportWebP(callback) {
