@@ -15,7 +15,7 @@ export default class AC {
 		AC._passiveSupport = false;
 		
 		try {
-			let opts = Object.defineProperty({}, 'passive', {
+			const opts = Object.defineProperty({}, 'passive', {
 				get: function() {
 					AC._passiveSupport = true;
 				}
@@ -56,8 +56,8 @@ export default class AC {
 	
 	static wrap(element) {
 		if (element.length) {
-			let list = [],
-				i    = -1;
+			const list = [];
+			let i      = -1;
 			
 			while (++i < element.length) {
 				list.push(new AC(element[i]));
@@ -225,7 +225,7 @@ export default class AC {
 			return;
 		}
 		
-		let img = new Image();
+		const img = new Image();
 		
 		img.onload = function() {
 			AC._webpSupport = (img.width > 0) && (img.height > 0);
@@ -385,7 +385,7 @@ export default class AC {
 	}
 	
 	get offset() {
-		let rect = this._el.getBoundingClientRect();
+		const rect = this._el.getBoundingClientRect();
 		
 		return {
 			top: rect.top + AC.pageY(),
